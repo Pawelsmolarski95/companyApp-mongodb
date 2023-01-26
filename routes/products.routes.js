@@ -1,85 +1,19 @@
 const express = require('express');
-const Product = require('./../models/products.model');
+const ProductControllers = require('./../controllers/products.controller');
 const router = express.Router();
 
 
-router.get('/products', async (req, res) => {
-  
-  try {
-    res.json(await Product.find());
-  }
-  catch(err) {
-    res.status(500).json({message: err});
-  }
-});
+router.get('/products', ProductControllers.getAll);
 
-router.get('/products/random', async (req, res) => {
-  
-  try {
-    const count = await Product.countDocuments();
-    const rand =  Math.floor(Math.random() * count);
-    const pro = await Product.findOne().skip(rand);
-    if(!pro) res.status(404).json({ message: 'Not found' })
-    else res.json(pro)
-  }
-  catch(err) {
-    res.status(500).json({message: err});
-  }
-})
+router.get('/products/random', ProductControllers.getRandom);
 
-router.get('/products/:id', async (req, res) => {
-  
-  try {
-    const pro = await Product.findById(req.params.id);
-    if(!pro) res.status(404).json({ message: 'Not found' });
-    else res.json(pro);
-  }
-  catch(err) {
-    res.status(500).json({message: err});
-  }
-});
+router.get('/products/:id', ProductControllers.getProById);
 
-router.post('/products', async (req, res) => {
-  
-  try {
-    const { name, client } = req.body;
-    const newProduct =  newProduct({ name: name, client: client });
-    newProduct.save();
-    res.json({ message: 'OK' });
-  }
-  catch(err) {
-      res.status(500).json({message: err});
-  }
-});
+router.post('/products', ProductControllers.postPro);
 
-router.put('/products/:id', async (req, res) => {
-  
-  try {
-    const { name, client } = req.body;
-    const pro = await Product.findById(req.params.id);
-    if(pro) {
-      await Product.updateOne({_id: req.params.id}, {$set: { name: name, client: client } });
-      res.json(pro);
-    } else {
-        res.status(404).json({ message: 'Not found' });
-    }  
-  }
-  catch(err) {
-    res.status(500).json({message: err});
-  } 
-});
+router.put('/products/:id', ProductControllers.editPro);
 
-router.delete('/products/:id', async (req, res) => {
-  
-  try {
-    const pro = await Product.findById(req.params.id);
-    if(!pro) res.status(404).json({ message: 'Not found' });
-    else await Product.deleteOne(req.params.id)
-  }
-  catch(err) {
-    res.status(500).json({message: err});
-  }
-});
+router.delete('/products/:id', ProductControllers.deletePro);
 
 
 module.exports = router;
