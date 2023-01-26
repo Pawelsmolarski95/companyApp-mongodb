@@ -59,7 +59,7 @@ router.put('/products/:id', async (req, res) => {
     const pro = await Product.findById(req.params.id);
     if(pro) {
       await Product.updateOne({_id: req.params.id}, {$set: { name: name, client: client } });
-      res.json({ message: 'OK' });
+      res.json(pro);
     } else {
         res.status(404).json({ message: 'Not found' });
     }  
