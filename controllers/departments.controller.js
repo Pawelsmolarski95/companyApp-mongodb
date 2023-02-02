@@ -80,6 +80,9 @@ exports.deleteDep = async (req, res) => {
         }
         else{
             res.json({ deleted: docs });
+            res.json({
+              message: 'OK',
+            });
         }
       });
     } 
