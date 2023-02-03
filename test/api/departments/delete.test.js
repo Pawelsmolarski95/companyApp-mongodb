@@ -16,8 +16,7 @@ describe('DELETE /api/departments/:id', () => {
       });
     it('/id should remove one department by id ', async () => {
         const res = await request(server).delete('/api/departments/d9f1159f81ce8d1ef2bee48');
-        expect(res.body).not.to.be.null;
         expect(res.status).to.be.equal(200);
-    
+        expect(res.body).not.to.be.null;
     });
 })
